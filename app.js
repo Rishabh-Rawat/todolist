@@ -1,13 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
-mongoose.connect(
-  "mongodb+srv://rishabh:04012002@cluster0.uthxsbh.mongodb.net/todolistDB?retryWrites=true&w=majority"
-);
+mongoose.connect(process.env.MONGO_DB_URL);
 
 const app = express();
 
