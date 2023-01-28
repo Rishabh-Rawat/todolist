@@ -6,7 +6,16 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_DB_URL);
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
 
 const app = express();
 
@@ -136,6 +145,9 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
-app.listen(3000, function () {
-  console.log("Server started on port 3000");
-});
+//Connect to the database before listening
+connectDB().then(() => {
+    app.listen(process.env.PORT || 3000, () => {
+        console.log("listening for requests");
+    })
+})
